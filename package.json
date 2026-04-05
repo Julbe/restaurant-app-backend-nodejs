@@ -1,0 +1,35 @@
+{
+  "name": "restaurant-backend-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/restaurant-soft/restaurant-backend-nodejs.git"
+  },
+  "author": "Julio B.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/restaurant-soft/restaurant-backend-nodejs/issues"
+  },
+  "homepage": "https://gitlab.com/restaurant-soft/restaurant-backend-nodejs#readme",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.990.0",
+    "@aws-sdk/s3-request-presigner": "^3.990.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.2",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
