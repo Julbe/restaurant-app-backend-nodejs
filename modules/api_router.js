@@ -8,11 +8,11 @@ export const setupRoutes = (app) => {
     const API_ROUTE = "/api";
     app.get(API_ROUTE, (req, res) => {
         res.status(200).send({
-        serverName: "Restaurant service",
-        environment: process.env.PRODUCTION || false,
-        version: "0.0.0",
-        releaseDate: "2025",
-        message: "",
+            serverName: "Restaurant service",
+            environment: process.env.PRODUCTION || false,
+            version: "1.0.0",
+            releaseDate: "2025",
+            message: "",
         });
     });
 
