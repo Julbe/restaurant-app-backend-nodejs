@@ -1,5 +1,5 @@
 
-import { registerRoutes } from "../modules/registerRoutes.js";
+import { registerRoutes } from "./registerRoutes.js";
 import { PRIVILEGES } from "../config/privileges.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import { requirePrivilege } from "../middlewares/requirePrivilege.js";
