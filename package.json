@@ -30,6 +30,10 @@
     "multer": "^2.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
+    "nodemon": "^3.1.10",
+    "semantic-release": "^24.2.9"
   }
 }
