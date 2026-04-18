@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.2.0...v1.3.0) (2026-04-18)
+
+
+### Features
+
+* rename managerRoutes and managerController ([8370bd1](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/8370bd1419d8cff18b5aa3c87108331b21aac6d7))
+
 # [1.2.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.1.0...v1.2.0) (2026-04-18)
 
 
