@@ -3,16 +3,20 @@ import { registerRoutes } from "./registerRoutes.js";
 import { PRIVILEGES } from "../config/privileges.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import { requirePrivilege } from "../middlewares/requirePrivilege.js";
+import { getLatestReleaseInfo } from "../utils/changelogInfo.js";
 
 export const setupRoutes = (app) => {
     const API_ROUTE = "/api";
     app.get(API_ROUTE, (req, res) => {
+
+        const { version, releaseDate, message } = getLatestReleaseInfo();
+
         res.status(200).send({
-            serverName: "Restaurant service",
+            serverName: "Restaurant service API Running 🚀",
             environment: process.env.PRODUCTION || false,
-            version: "1.0.0",
-            releaseDate: "2025",
-            message: "",
+            version,
+            releaseDate,
+            message,
         });
     });
 
