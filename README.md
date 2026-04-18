@@ -1,93 +1,386 @@
-# restaurant-backend-nodejs
+# Restaurant Backend Node.js
 
+API REST construida con Node.js, Express y MongoDB para la operación de un restaurante. El servidor está orientado a administrar usuarios, empleados, autenticación, sesiones, catálogo de menú, archivos en S3 y configuraciones generales consumidas por el frontend.
 
+## Objetivo del proyecto
 
-## Getting started
+Este backend forma parte de una plataforma de gestión para restaurante. A nivel funcional, el servidor está preparado para cubrir necesidades como:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- administración de empleados y usuarios internos
+- autenticación y control de sesiones
+- gestión de roles y privilegios
+- administración del menú mediante platillos, complementos, modificadores y combos
+- carga y consulta de archivos en Amazon S3
+- almacenamiento de configuraciones globales del sistema
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Nota técnica: en la capa de privilegios existe el permiso `orders`, pero actualmente este repositorio no expone un módulo `/api/orders`.
 
-## Add your files
+## Stack
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+- Node.js
+- Express 5
+- MongoDB con Mongoose
+- JWT para autenticación
+- bcrypt para hash de contraseñas
+- Amazon S3 para archivos y settings JSON
+- Nodemon para desarrollo
 
+## Requisitos
+
+- Node.js 18 o superior
+- npm 9 o superior
+- Una instancia de MongoDB accesible desde la app
+- Un bucket de S3 configurado si se van a usar archivos o settings remotos
+
+## Variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto. Puedes partir de [`/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/.env.example`](/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/.env.example).
+
+Variables usadas por el servidor:
+
+| Variable | Requerida | Descripción |
+| --- | --- | --- |
+| `PORT` | No | Puerto HTTP del servidor. Default: `3000`. |
+| `NODE_ENV` | No | Ambiente de ejecución. Se usa como referencia informativa en `GET /`. |
+| `PRODUCTION` | No | Flag que la API devuelve en algunos endpoints de diagnóstico. |
+| `DB_CONNECTION` | Sí | String de conexión a MongoDB. |
+| `JWT_SECRET` | Sí | Secreto usado para firmar y validar tokens JWT. |
+| `BUCKET_NAME` | Sí, si se usa S3 | Nombre del bucket privado. |
+| `BUCKET_REGION` | Sí, si se usa S3 | Región del bucket S3. |
+| `BUCKET_ACCESS_KEY` | Sí, si se usa S3 | Access key con permisos sobre el bucket. |
+| `BUCKET_SECRET_KEY` | Sí, si se usa S3 | Secret key con permisos sobre el bucket. |
+| `BUCKET_URL` | No | URL pública base para archivos bajo el prefijo `public/`. |
+| `SETTINGS_KEY` | No | Key del JSON de configuración en S3. Si no existe, usa el fallback definido en código. |
+
+Ejemplo:
+
+```env
+PORT=3000
+NODE_ENV=development
+PRODUCTION=false
+
+DB_CONNECTION=mongodb+srv://<user>:<password>@<cluster>/<database>?retryWrites=true&w=majority
+JWT_SECRET=replace_with_a_secure_secret
+
+BUCKET_NAME=restaurant-assets
+BUCKET_REGION=us-east-1
+BUCKET_ACCESS_KEY=replace_with_access_key
+BUCKET_SECRET_KEY=replace_with_secret_key
+BUCKET_URL=https://restaurant-assets.s3.us-east-1.amazonaws.com/
+
+SETTINGS_KEY=settings/app-settings.json
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/restaurant-soft/restaurant-backend-nodejs.git
-git branch -M main
-git push -uf origin main
+
+## Instalación y ejecución
+
+1. Clona el repositorio:
+
+```bash
+git clone https://github.com/Julbe/restaurant-app-backend-nodejs.git
+cd restaurant-app-backend-nodejs
 ```
 
-## Integrate with your tools
+2. Instala dependencias:
 
-- [ ] [Set up project integrations](https://gitlab.com/restaurant-soft/restaurant-backend-nodejs/-/settings/integrations)
+```bash
+npm install
+```
 
-## Collaborate with your team
+3. Crea tu archivo `.env` a partir del ejemplo:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```bash
+cp .env.example .env
+```
 
-## Test and Deploy
+4. Ajusta las variables con tus credenciales reales.
 
-Use the built-in continuous integration in GitLab.
+5. Inicia el servidor en desarrollo:
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+```bash
+npm run dev
+```
 
-***
+Si quieres ejecutarlo sin `nodemon`:
 
-# Editing this README
+```bash
+node src/app.js
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Verificación rápida
 
-## Suggestions for a good README
+Con el servidor arriba, puedes validar:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- `GET /` devuelve estado básico del servidor
+- `GET /api` devuelve información de versión y release
 
-## Name
-Choose a self-explaining name for your project.
+Ejemplo local:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```bash
+curl http://localhost:3000/
+curl http://localhost:3000/api
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Autenticación
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+La autenticación usa JWT por medio de `Authorization: Bearer <token>`.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Endpoints clave:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+- `POST /api/auth/login`
+- `PATCH /api/auth/change-password`
+- `GET /api/token`
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+El token incluye información del usuario autenticado, rol y privilegios habilitados. La expiración actual del token es de 1 hora.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## Estructura general de la API
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Las rutas se registran automáticamente usando el nombre de cada carpeta dentro de `src/modules`. Por eso los prefijos reales quedan así:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+| Prefijo | Descripción |
+| --- | --- |
+| `/api/auth` | Login y cambio de contraseña |
+| `/api/user` | Usuarios del sistema |
+| `/api/employee` | Empleados |
+| `/api/roles` | Roles y privilegios |
+| `/api/session` | Sesiones activas |
+| `/api/dish` | Platillos |
+| `/api/side` | Complementos o guarniciones |
+| `/api/modifiers` | Modificadores de productos |
+| `/api/combo` | Combos |
+| `/api/files` | Archivos en S3 |
+| `/api/news` | Noticias o contenido visible |
+| `/api/AppSettings` | Configuración global guardada en S3 |
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## Carga automática de controladores
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+[`managerController.js`](/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/src/modules/managerController.js) centraliza la carga automática de controladores del proyecto.
 
-## License
-For open source projects, say how it is licensed.
+Su responsabilidad es:
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- leer todas las carpetas dentro de `src/modules`
+- buscar dentro de cada carpeta un archivo que termine en `.controller.js`
+- importar dinámicamente ese controlador
+- instanciarlo y registrarlo dentro del objeto global `Manager`
+- exponer cada instancia con una clave derivada del nombre del folder
+
+Ejemplo de resolución:
+
+- `src/modules/employee/employee.controller.js` se registra como `Manager.Employee`
+- `src/modules/roles/role.controller.js` se registra como `Manager.Role`
+- `src/modules/session/session.controller.js` se registra como `Manager.Session`
+
+Después, las rutas usan esas instancias para mapear endpoints hacia acciones CRUD, por ejemplo:
+
+```js
+route.get("/", verifyToken, Manager.Employee.getAll);
+route.post("/", verifyToken, Manager.Employee.create);
+```
+
+### Relación con `BaseController`
+
+[`BaseController`](/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/src/modules/baseController.js) es la clase base pensada para los controladores de cada módulo. Su objetivo es evitar repetir la lógica estándar de CRUD para modelos de MongoDB.
+
+Define una capa genérica basada en un modelo de Mongoose y entrega estos métodos principales:
+
+- `create`: crea un documento con `model.create(...)`
+- `getAll`: lista documentos con filtros, búsqueda, paginación, sort y populate
+- `getById`: obtiene un documento por id
+- `update`: actualiza un documento con `findByIdAndUpdate`
+- `delete`: elimina un documento por id
+
+Además, `BaseController` permite extender comportamiento por módulo con hooks como:
+
+- `beforeCreate`
+- `afterCreate`
+- `beforeGetAll`
+- `afterGetAll`
+- `beforeUpdate`
+- `afterUpdate`
+- `beforeDelete`
+- `afterDelete`
+- `afterGetById`
+
+Eso hace posible que cada controlador mantenga una estructura consistente y solo sobrescriba la lógica específica del negocio cuando sea necesario.
+
+Ejemplo conceptual:
+
+```js
+export default class EmployeeController extends BaseController {
+  constructor() {
+    super(EmployeeModel, "Empleado", ["name", "email"]);
+  }
+}
+```
+
+Importante: por convención, los controladores cargados por `managerController.js` deberían extender `BaseController` para heredar el CRUD estándar sobre MongoDB. Sin embargo, la implementación actual no valida en runtime si la clase realmente hereda de `BaseController`; simplemente importa cualquier archivo `*.controller.js` y crea una instancia de su export default.
+
+## Carga automática de rutas
+
+[`managerRoutes.js`](/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/src/modules/managerRoutes.js) es el encargado de registrar rutas automáticamente en Express.
+
+Su flujo es:
+
+- leer todas las carpetas de `src/modules`
+- buscar en cada una un archivo con sufijo `.routes.js`
+- importar dinámicamente el `router` exportado por default
+- montar ese router en Express usando como prefijo `/api/<nombre-del-folder>`
+
+Ejemplos:
+
+- `src/modules/employee/employee.routes.js` se monta en `/api/employee`
+- `src/modules/dish/dish.routes.js` se monta en `/api/dish`
+- `src/modules/files/file.routes.js` se monta en `/api/files`
+
+Esto permite que la API crezca por módulos sin tener que registrar manualmente cada ruta en `app.js`. Para agregar un nuevo módulo, normalmente basta con:
+
+1. crear una carpeta dentro de `src/modules`
+2. agregar un archivo `*.controller.js`
+3. agregar un archivo `*.routes.js`
+4. exportar un `Router` de Express por default
+
+Con esa convención, `managerController.js` y `managerRoutes.js` integran automáticamente el módulo al servidor.
+
+## Convenciones de respuesta
+
+El proyecto usa un middleware que envuelve la mayoría de respuestas JSON bajo la forma:
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
+
+En endpoints paginados, la respuesta incluye metadatos:
+
+```json
+{
+  "success": true,
+  "page": 1,
+  "limit": 10,
+  "totalPages": 1,
+  "results": 3,
+  "data": []
+}
+```
+
+## Paginación y filtros
+
+Los controladores base soportan estos query params en listados:
+
+- `page`
+- `limit`
+- `sortBy`
+- `sortOrder`
+- `q`
+- `_fields`
+- `populate`
+
+Además, cualquier otro query param no reservado se usa como filtro directo sobre MongoDB.
+
+Ejemplo:
+
+```bash
+curl "http://localhost:3000/api/employee?page=1&limit=20&sortBy=createdAt&sortOrder=desc"
+```
+
+## Estructura del proyecto
+
+```text
+src/
+  app.js                  # bootstrap del servidor
+  db.js                   # conexión a MongoDB
+  middlewares/            # auth, manejo de errores, uploads, wrapper de respuesta
+  modules/                # módulos de negocio y rutas
+  services/               # integración con S3
+  utils/                  # utilidades de soporte
+  config/                 # privilegios y configuración estática
+```
+
+## Scripts disponibles
+
+- `npm run dev`: levanta el servidor con `nodemon`
+- `npm run release`: genera versión y changelog con `standard-version`
+
+## Releases y versionado automático
+
+El repositorio ya incluye configuración de [`semantic-release`](https://semantic-release.gitbook.io/semantic-release/) en [`/.releaserc.json`](/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/.releaserc.json).
+
+La idea de este flujo es automatizar el versionado del proyecto a partir del historial de commits. Cuando se ejecuta `semantic-release` sobre la rama `main`, el proceso analiza los mensajes de commit y con base en ellos puede:
+
+- calcular el siguiente número de versión
+- generar o actualizar el `CHANGELOG.md`
+- crear el tag de release en Git
+- publicar la release en GitHub
+
+### Cómo decide la versión
+
+El versionado depende del tipo de commit:
+
+- `fix:` genera normalmente un incremento `patch`
+- `feat:` genera normalmente un incremento `minor`
+- un commit con `BREAKING CHANGE:` o `!` en el tipo genera normalmente un incremento `major`
+
+Ejemplos:
+
+```bash
+git commit -m "fix(auth): corregir validación del token expirado"
+git commit -m "feat(employee): agregar filtro por sucursal"
+git commit -m "feat(menu)!: reorganizar estructura de modifiers"
+```
+
+### Recomendación: usar Conventional Commits
+
+Para que el versionado automático funcione de forma consistente, se recomienda usar el formato de [Conventional Commits](https://www.conventionalcommits.org/).
+
+Estructura sugerida:
+
+```text
+tipo(scope): descripción corta
+```
+
+Tipos comunes para este proyecto:
+
+- `feat`: nueva funcionalidad
+- `fix`: corrección de bug
+- `chore`: mantenimiento interno
+- `refactor`: cambio interno sin alterar comportamiento esperado
+- `docs`: cambios de documentación
+- `test`: cambios en pruebas
+
+Ejemplos recomendados:
+
+```bash
+git commit -m "feat(dish): agregar endpoint para consultar platillos activos"
+git commit -m "fix(session): evitar renovar sesiones expiradas"
+git commit -m "docs(readme): documentar managerController y managerRoutes"
+git commit -m "refactor(employee): simplificar hooks del controlador"
+git commit -m "chore(release): preparar flujo de versionado"
+```
+
+Si existe un cambio incompatible con versiones previas, se recomienda marcarlo explícitamente:
+
+```bash
+git commit -m "feat(user)!: cambiar estructura del payload de login"
+```
+
+O bien incluir una nota de ruptura en el cuerpo del commit:
+
+```text
+feat(user): cambiar estructura del payload de login
+
+BREAKING CHANGE: el endpoint /api/auth/login ya no devuelve el campo roleName
+```
+
+### Nota sobre el estado actual del repositorio
+
+Actualmente conviven dos piezas relacionadas con releases:
+
+- el archivo [`/.releaserc.json`](/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/.releaserc.json), que define el flujo de `semantic-release`
+- el script `npm run release` en [`package.json`](/Users/juliobeas/Desktop/repo/restaurant-app-backend-nodejs/package.json), que hoy ejecuta `standard-version`
+
+Eso significa que la intención de versionado automático ya está presente, pero para que los tags y releases se generen completamente en automático normalmente hace falta ejecutar `semantic-release` desde CI sobre `main`.
+
+## Estado actual
+
+El proyecto no tiene pruebas automatizadas configuradas todavía. El script `npm test` actualmente no ejecuta una suite real.
