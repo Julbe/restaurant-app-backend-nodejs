@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.1.0...v1.2.0) (2026-04-18)
+
+
+### Features
+
+* add release in api health ([235dd38](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/235dd38fb677a04fb11c62f6717052d879729bf4))
+
 # [1.1.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.0.0...v1.1.0) (2026-04-18)
 
 
