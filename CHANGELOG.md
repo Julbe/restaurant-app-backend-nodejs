@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.0.0...v1.1.0) (2026-04-18)
+
+
+### Features
+
+*  update modules to src folder ([48f3225](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/48f3225ceeac6affd393f5b7289ea9902e9c455e))
+
 # 1.0.0 (2026-04-18)
 
 
