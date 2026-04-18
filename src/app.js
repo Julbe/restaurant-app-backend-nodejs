@@ -8,15 +8,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const URI = process.env.DB_CONNECTION;
 
-import connectDB from'./db.js';
-import { setupRoutes }  from "./modules/api_router.js";
+import connectDB from './db.js';
+import { setupRoutes } from "./modules/api_router.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { wrapResponse } from "./middlewares/wrapResponse.js";
-import { Manager } from "./modules/manager.js";
+import { Manager } from "./modules/managerController.js";
 
 // Ruta básica
 
-console.log("Controladores cargados:", Object.keys(Manager)); 
+console.log("Controladores cargados:", Object.keys(Manager));
 
 app.get("/", (req, res) => {
   res.json({

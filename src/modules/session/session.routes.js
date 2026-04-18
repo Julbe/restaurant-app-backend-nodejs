@@ -1,5 +1,5 @@
 import express from "express";
-import { Manager } from "../manager.js";
+import { Manager } from "../managerController.js";
 import { verifyToken } from "../../middlewares/verifyToken.js";
 
 const roleRoute = express.Router();

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { Manager } from "../manager.js";
+import { Manager } from "../managerController.js";
 import { singleFile } from "../../middlewares/uploadMulter.middleware.js";
 import { verifyToken } from "../../middlewares/verifyToken.js";
 
