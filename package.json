@@ -10,14 +10,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/restaurant-soft/restaurant-backend-nodejs.git"
+    "url": "git+https://github.com/Julbe/restaurant-app-backend-nodejs.git"
   },
   "author": "Julio B.",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/restaurant-soft/restaurant-backend-nodejs/issues"
+    "url": "https://github.com/Julbe/restaurant-app-backend-nodejs/issues"
   },
-  "homepage": "https://gitlab.com/restaurant-soft/restaurant-backend-nodejs#readme",
+  "homepage": "https://github.com/Julbe/restaurant-app-backend-nodejs#readme",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "repositoryUrl": "https://github.com/Julbe/restaurant-app-backend-nodejs.git"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.990.0",
     "@aws-sdk/s3-request-presigner": "^3.990.0",
