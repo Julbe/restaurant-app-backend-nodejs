@@ -6,8 +6,13 @@ import { Dish } from "./dish.model.js";
 
 export default class DishController extends BaseController {
     constructor() {
-        super(Dish, "Dish", ["name"], [], ["modifiers", "sides.items"]);
+        super(
+            Dish,
+            "Dish",
+            ["name", "detail"],
+            ["modifiers", "sides.items", "areaMenu_id"],
+            ["modifiers", "sides.items", "areaMenu_id"]
+        );
     }
 }
-
 
