@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.3.0...v1.4.0) (2026-05-05)
+
+
+### Features
+
+* **menu:** add areaMenus and update dish controller ([622d6f8](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/622d6f8a37425b2c7dbd7328d95120fe1bd1381b))
+
 # [1.3.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.2.0...v1.3.0) (2026-04-18)
 
 
