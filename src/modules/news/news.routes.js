@@ -9,7 +9,7 @@ const route = express.Router();
 route.post("/", verifyToken, Manager.New.create);
 route.get("/", Manager.New.getAll);
 route.get("/:id", Manager.New.getById);
-route.patch("/:id", verifyToken, Manager.New.update);
+route.put("/:id", verifyToken, Manager.New.update);
 route.delete("/:id", verifyToken, Manager.New.delete);
 
 
