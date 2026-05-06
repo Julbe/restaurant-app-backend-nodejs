@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.4.0...v1.5.0) (2026-05-06)
+
+
+### Bug Fixes
+
+* **news:** put instead patch ([0a37dbb](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/0a37dbbb3a435afdb38b38544b608ee4dc313dbc))
+
+
+### Features
+
+* **s3:** extend exprie time ([4389bbd](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/4389bbd30da00e1e389e79c72d0f1ec3d7b7a3dc))
+
 # [1.4.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.3.0...v1.4.0) (2026-05-05)
 
 
