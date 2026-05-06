@@ -63,7 +63,7 @@ async function deleteFile(Key, bucket = BUCKET_TYPE.private) {
     }));
 }
 
-async function getUrl(Key, bucket = BUCKET_TYPE.private, expiresIn = 3600) {
+async function getUrl(Key, bucket = BUCKET_TYPE.private, expiresIn = 120000) {
 
 
     if (Key.startsWith(PUBLIC_PREFIX)) {
