@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.6.0...v1.7.0) (2026-05-07)
+
+
+### Features
+
+* **authorization:** Add privileges validation ([9e4ee17](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/9e4ee174eeea3556a83924a7cbd0bffaebe508ed))
+
 # [1.6.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.5.0...v1.6.0) (2026-05-07)
 
 
