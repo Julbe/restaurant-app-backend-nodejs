@@ -6,8 +6,13 @@ import { Modifier } from "./modifier.model.js";
 
 export default class ModifierController extends BaseController {
     constructor() {
-        super(Modifier, "Modifier");
+        super(
+            Modifier,
+            "Modifier",
+            ["name", "default", "scope"],
+            ["productRefs"],
+            ["productRefs"]
+        );
     }
 }
-
 
