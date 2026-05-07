@@ -1,3 +1,14 @@
+# [1.6.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.5.0...v1.6.0) (2026-05-07)
+
+
+### Features
+
+* **combo:** Update combo module ([d227f57](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/d227f57c6669ab7bbc45e4eac2bc77d10085e221))
+* **dish:** Update logic. ([4d900f0](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/4d900f0258f04f96e66b3aae95ecce32f802d622))
+* **Modifiers:** update module ([64a6f1c](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/64a6f1c78cc76ea727bb737132b0a2212ce92693))
+* **products:** Add new module. ([6795c2f](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/6795c2f938334006f2b140c3c3e290fe2b6b8cd1))
+* **sides:** Update model ([11b323f](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/11b323f52e9b26e33c36ea3a8372abb652aa8d17))
+
 # [1.5.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.4.0...v1.5.0) (2026-05-06)
 
 
