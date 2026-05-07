@@ -10,9 +10,24 @@ export default class DishController extends BaseController {
             Dish,
             "Dish",
             ["name", "detail"],
-            ["modifiers", "sides.items", "areaMenu_id"],
-            ["modifiers", "sides.items", "areaMenu_id"]
+            [
+                "modifiers",
+                "sides.items",
+                "areaMenu_id",
+                "productId",
+                "selectionGroups.options.dishId",
+                "selectionGroups.options.productId",
+                "selectionGroups.options.sideId",
+            ],
+            [
+                "modifiers",
+                "sides.items",
+                "areaMenu_id",
+                "productId",
+                "selectionGroups.options.dishId",
+                "selectionGroups.options.productId",
+                "selectionGroups.options.sideId",
+            ]
         );
     }
 }
-
