@@ -53,6 +53,19 @@ export default class UserController extends BaseController {
     res.json(user);
   }, "No se pudo actualizar el usuario");
 
+  resetPassword = catchAsync(async (req, res) => {
+    const defaultPassword = generateCode(`${'P'}`, 6);
+    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
+    const user = await UserM.findByIdAndUpdate(req.params.id, {
+      password: hashedPassword,
+      defaultPassword: defaultPassword
+    }, { new: true });
+
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+    res.json(user);
+  }, "No se pudo actualizar el usuario");
+
   setNewPassword = catchAsync(async (req, res) => {
     const { password } = req.body;
 

@@ -30,7 +30,7 @@ export const setupRoutes = (app) => {
                 version: "0.0.0",
                 releaseDate: "2025",
                 message: "Token validado correctamente",
-                user: req.user,
+                user: res.locals.user,
             });
         }
     );

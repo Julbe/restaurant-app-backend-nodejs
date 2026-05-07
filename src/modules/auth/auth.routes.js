@@ -73,7 +73,7 @@ router.post("/login", async (req, res) => {
 
 router.patch("/change-password", verifyToken, async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = res.locals.user?.id;
     const { currentPassword, newPassword } = req.body ?? {};
 
     if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
