@@ -10,8 +10,8 @@ export default class ModifierController extends BaseController {
             Modifier,
             "Modifier",
             ["name", "default", "scope"],
-            ["productRefs"],
-            ["productRefs"]
+            [],
+            []
         );
     }
 }
