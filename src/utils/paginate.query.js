@@ -1,3 +1,5 @@
+import { buildPopulateOptions } from "./buildPopulateOptions.js";
+
 export const paginate = async ({
     model,
     filter = {},
@@ -6,6 +8,7 @@ export const paginate = async ({
     sortBy = "createdAt",
     sortOrder = "desc",
     populate = [],
+    populateGroups = {},
     _fields = ""
 }) => {
     if (page < 1) {
@@ -19,12 +22,12 @@ export const paginate = async ({
 
     if (_fields != "") query = query.select(_fields);
 
-    if (populate && populate.length > 0) {
-        if (Array.isArray(populate)) {
-            populate.forEach((p) => query.populate(p));
-        } else {
-            query.populate(populate);
-        }
+    const populateOptions = buildPopulateOptions(populate, populateGroups);
+
+    if (populateOptions.length > 0) {
+        populateOptions.forEach((p) => {
+            query = query.populate(p);
+        });
     }
 
     const [data, totalResults] = await Promise.all([

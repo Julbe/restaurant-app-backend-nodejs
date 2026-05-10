@@ -1,17 +1,21 @@
 
 import { buildSafeFilter } from "../libraries/buildSafeFilter.query.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { buildPopulateOptions } from "../utils/buildPopulateOptions.js";
 import { paginate } from "../utils/paginate.query.js";
 
 export default class BaseController {
 
-    constructor(model, modelName = "Item", searchableFields = [], populateAll = [], populateOne = [], defaultFields = []) {
+    constructor(model, modelName = "Item", searchableFields = [],
+        populateAll = [], populateOne = [], defaultFields = [],
+        populateGroups = {}) {
         this.model = model;
         this.modelName = modelName;
         this.searchableFields = searchableFields;
         this.populateAll = populateAll;
         this.populateOne = populateOne;
         this.defaultFields = defaultFields;
+        this.populateGroups = populateGroups;
     }
 
     async beforeCreate(req) { return req.body }
@@ -39,7 +43,7 @@ export default class BaseController {
     }, `No se pudo agregar ${this.modelName}`);
 
     async findAll(query) {
-        const { page = 1, limit = 10, sortBy = "createdAt", sortOrder, _fields = "", populate = "" } = query;
+        const { page = 1, limit = 10, sortBy = "createdAt", sortOrder, _fields = "", populate = undefined } = query;
 
         const result = await this.beforeGetAll(query);
 
@@ -57,6 +61,7 @@ export default class BaseController {
             };
         }
 
+
         const fields = _fields?.split(",").join(" ") || this.defaultFields?.join(" ") || "";
         const _populate = populate?.split(",") || this.populateAll || [];
 
@@ -68,6 +73,7 @@ export default class BaseController {
             sortBy,
             sortOrder,
             populate: _populate,
+            populateGroups: this.populateGroups,
             _fields: fields
         });
     }
@@ -81,8 +87,9 @@ export default class BaseController {
 
     getById = catchAsync(async (req, res) => {
         let query = this.model.findById(req.params.id).lean();
-        if (Array.isArray(this.populateOne) && this.populateOne.length > 0) {
-            this.populateOne.forEach((pop) => {
+        const populateOptions = buildPopulateOptions(this.populateOne, this.populateGroups);
+        if (populateOptions.length > 0) {
+            populateOptions.forEach((pop) => {
                 query = query.populate(pop);
             });
         }
