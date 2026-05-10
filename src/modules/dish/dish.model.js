@@ -45,7 +45,14 @@ const dishSchema = new Schema(
             enum: ["fixed", "selectable"],
             default: "fixed",
         },
-        productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+        productIds: {
+            type: [{
+                type: Schema.Types.ObjectId,
+                ref: "Product",
+            }],
+            default: [],
+        },
+        productId: { type: Schema.Types.ObjectId, ref: "Product", default: null },
         selectionGroups: [dishSelectionGroupSchema],
         modifiers: [{ type: Schema.Types.ObjectId, ref: "Modifier" }],
         sides: {
