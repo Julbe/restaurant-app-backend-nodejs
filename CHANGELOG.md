@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.7.0...v1.8.0) (2026-05-10)
+
+
+### Features
+
+* **news:** Metrics ([301e35e](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/301e35ea1225b527a3bf6a88b0cd0840e1bf218e))
+
 # [1.7.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.6.0...v1.7.0) (2026-05-07)
 
 
