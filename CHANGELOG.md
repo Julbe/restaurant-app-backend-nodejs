@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.8.0...v1.8.1) (2026-05-10)
+
+
+### Bug Fixes
+
+* **modifiers:** Remove unused reference. ([82e0bd6](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/82e0bd6c2fa968e8c73cdc2df5916343acdb658a))
+
 # [1.8.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.7.0...v1.8.0) (2026-05-10)
 
 
