@@ -11,7 +11,6 @@ export default class ComboController extends BaseController {
             [
                 "options.dish",
                 "sides.items",
-                "components.productId",
                 "selectionGroups.options.dishId",
                 "selectionGroups.options.productId",
                 "selectionGroups.options.sideId",
@@ -19,7 +18,6 @@ export default class ComboController extends BaseController {
             [
                 "options.dish",
                 "sides.items",
-                "components.productId",
                 "selectionGroups.options.dishId",
                 "selectionGroups.options.productId",
                 "selectionGroups.options.sideId",

@@ -40,6 +40,12 @@ const dishSchema = new Schema(
         s3Key: { type: String, trim: true, default: "" },
         price: { type: Number, required: true },
         areaMenu_id: { type: Schema.Types.ObjectId, ref: "AreaMenu", default: null, index: true },
+        preparationArea: {
+            type: String,
+            enum: ["bar", "kitchen", "cold_kitchen"],
+            default: "kitchen",
+            index: true,
+        },
         configurationMode: {
             type: String,
             enum: ["fixed", "selectable"],
