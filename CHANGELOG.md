@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.8.1...v1.9.0) (2026-05-10)
+
+
+### Features
+
+* **Dish:** Products instead product. ([e1a716f](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/e1a716ff214201b47b76f7c0722a5c4cb4929115))
+
 ## [1.8.1](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.8.0...v1.8.1) (2026-05-10)
 
 
