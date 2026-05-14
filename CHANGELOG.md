@@ -1,3 +1,13 @@
+# [1.10.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.9.0...v1.10.0) (2026-05-14)
+
+
+### Features
+
+* **Menu:** Update digital menu ([675bb96](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/675bb96fd735a8fa40275cf01bd19d95cda26ca9))
+* **Orders:** Add module orders ([1d71c74](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/1d71c7494690eea8b9916ff3458b2da68facfc12))
+* **tables:** Add new module. ([e2f30dd](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/e2f30ddaec7cec36ef21eee4c9b41239a1352fbe))
+* **Tickets:** Add new ticket module ([05c41cf](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/05c41cf05a2e92bf9741f17c3f8170faa300db2b))
+
 # [1.9.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.8.1...v1.9.0) (2026-05-10)
 
 
