@@ -1,6 +1,52 @@
 import { generateCode } from "../../utils/generateCodes.js";
 import BaseController from "../baseController.js";
+import { Order } from "../orders/order.model.js";
 import { Ticket } from "./ticket.model.js";
+
+const SERVICE_TYPES = ["takeOut", "here"];
+
+const hasOwn = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
+
+const createHttpError = (message, statusCode) => {
+    const error = new Error(message);
+    error.statusCode = statusCode;
+    return error;
+};
+
+const normalizeTableId = (value) => {
+    if (value === "" || value === undefined) {
+        return null;
+    }
+
+    return value;
+};
+
+const normalizeTicketPayload = (payload = {}, currentTicket = null) => {
+    const data = { ...payload };
+    const serviceType = data.serviceType ?? currentTicket?.serviceType ?? "here";
+
+    if (!SERVICE_TYPES.includes(serviceType)) {
+        throw createHttpError("serviceType inválido. Usa 'takeOut' o 'here'.", 400);
+    }
+
+    data.serviceType = serviceType;
+
+    if (serviceType === "takeOut") {
+        data.tableId = null;
+        return data;
+    }
+
+    if (hasOwn(data, "tableId")) {
+        data.tableId = normalizeTableId(data.tableId);
+        return data;
+    }
+
+    if (!currentTicket) {
+        data.tableId = null;
+    }
+
+    return data;
+};
 
 const getWeekNumber = (date = new Date()) => {
     const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -15,30 +61,34 @@ export default class TicketController extends BaseController {
         super(
             Ticket,
             "Ticket",
-            ["code_ticket", "client_name", "notes"],
+            ["code_ticket", "client_name", "notes", "serviceType"],
             [
                 "waiterId",
-                "tableId",
-                {
-                    path: "orders",
-                    populate: [
-                        { path: "createdBy" },
-                        { path: "dishes" },
-                    ],
-                },
+                "tableId"
             ],
             [
                 "waiterId",
-                "tableId",
-                {
-                    path: "orders",
-                    populate: [
-                        { path: "createdBy" },
-                        { path: "dishes" },
-                    ],
-                },
-            ]
+                "tableId"
+            ],
+            [],
+            { "waiterId": "user" }
         );
+    }
+
+    async beforeCreate(req) {
+        return normalizeTicketPayload(req.body);
+    }
+
+    async beforeUpdate(req) {
+        const currentTicket = await Ticket.findById(req.params.id).select("serviceType tableId");
+        if (!currentTicket) {
+            throw createHttpError("No encontrado", 404);
+        }
+
+        const data = normalizeTicketPayload(req.body, currentTicket);
+        delete data.code_ticket;
+
+        return data;
     }
 
     async afterCreate(item) {
@@ -56,4 +106,33 @@ export default class TicketController extends BaseController {
 
         return item;
     }
+
+    cancelTicket = async (req, res) => {
+        try {
+            const ticket = await Ticket.findById(req.params.id);
+            if (!ticket) {
+                return res.status(404).json({ message: "No encontrado" });
+            }
+
+            await Order.updateMany(
+                {
+                    ticketId: ticket._id,
+                    status: "NEW",
+                },
+                {
+                    $set: { status: "CANCELED" },
+                }
+            );
+
+            ticket.status = "CANCELED";
+            await ticket.save();
+
+            return res.json(ticket);
+        } catch (error) {
+            const statusCode = error?.statusCode || 500;
+            return res.status(statusCode).json({
+                message: error?.message || "No se pudo cancelar el ticket.",
+            });
+        }
+    };
 }

@@ -45,6 +45,7 @@ Variables usadas por el servidor:
 | `PRODUCTION` | No | Flag que la API devuelve en algunos endpoints de diagnóstico. |
 | `DB_CONNECTION` | Sí | String de conexión a MongoDB. |
 | `JWT_SECRET` | Sí | Secreto usado para firmar y validar tokens JWT. |
+| `SESSION_INACTIVITY_LIMIT_MS` | No | Tiempo máximo de inactividad permitido para refrescar una sesión. Por defecto `1800000` (30 min). |
 | `BUCKET_NAME` | Sí, si se usa S3 | Nombre del bucket privado. |
 | `BUCKET_REGION` | Sí, si se usa S3 | Región del bucket S3. |
 | `BUCKET_ACCESS_KEY` | Sí, si se usa S3 | Access key con permisos sobre el bucket. |
@@ -61,6 +62,7 @@ PRODUCTION=false
 
 DB_CONNECTION=mongodb+srv://<user>:<password>@<cluster>/<database>?retryWrites=true&w=majority
 JWT_SECRET=replace_with_a_secure_secret
+SESSION_INACTIVITY_LIMIT_MS=1800000
 
 BUCKET_NAME=restaurant-assets
 BUCKET_REGION=us-east-1
@@ -127,10 +129,12 @@ La autenticación usa JWT por medio de `Authorization: Bearer <token>`.
 Endpoints clave:
 
 - `POST /api/auth/login`
+- `POST /api/auth/refresh`
 - `PATCH /api/auth/change-password`
 - `GET /api/token`
 
 El token incluye información del usuario autenticado, rol y privilegios habilitados. La expiración actual del token es de 1 hora.
+El refresh token puede renovar la sesión hasta por 7 días, pero el backend rechaza el refresh si la sesión supera el umbral de inactividad configurado.
 
 ## Estructura general de la API
 

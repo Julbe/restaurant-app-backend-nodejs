@@ -22,4 +22,11 @@ export const PRIVILEGES = {
 
     FILES: "files",
     MANAGE_FILES: "manage-files",
+
+    ORDERS: "orders",
+    MANAGE_ORDERS: "create-orders",
+
+    ticket_discount: "ticket-discount",
+    ticket_cancel: "ticket-cancel",
+    ticket_register: "ticket-register",
 };

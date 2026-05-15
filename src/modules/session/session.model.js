@@ -10,13 +10,25 @@ const sessionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    refreshToken: {
+        type: String,
+        required: true,
+    },
     ipAddress: String,
     userAgent: String,
     createdAt: {
         type: Date,
         default: Date.now,
     },
+    lastActivityAt: {
+        type: Date,
+        default: Date.now,
+    },
     expiresAt: {
+        type: Date,
+        required: true,
+    },
+    refreshExpiresAt: {
         type: Date,
         required: true,
     },

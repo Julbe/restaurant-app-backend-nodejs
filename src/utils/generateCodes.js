@@ -19,8 +19,30 @@ const generateUniqueCode = async (ExerciseModel, prefix = "", length = 5) => {
     return code;
 }
 
+const getLocalDateParts = (date = new Date(), timeZone = process.env.APP_TIMEZONE || "America/Mexico_City") => {
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+        timeZone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    });
+
+    const parts = formatter.formatToParts(date);
+    const year = parts.find((part) => part.type === "year")?.value;
+    const month = parts.find((part) => part.type === "month")?.value;
+    const day = parts.find((part) => part.type === "day")?.value;
+
+    return { year, month, day };
+};
+
+const getDailySequenceKey = (prefix = "", date = new Date(), timeZone = process.env.APP_TIMEZONE || "America/Mexico_City") => {
+    const { year, month, day } = getLocalDateParts(date, timeZone);
+    const dateKey = `${year}${month}${day}`;
+    return prefix ? `${prefix}-${dateKey}` : dateKey;
+};
 
 export {
     generateCode,
-    generateUniqueCode
+    generateUniqueCode,
+    getDailySequenceKey,
 };
