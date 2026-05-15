@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.10.0...v1.11.0) (2026-05-15)
+
+
+### Features
+
+* **tickets:** Update session controller and tickets workflow ([84fe779](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/84fe7799650c7e433dd9a6e203f37382d36eb2cc))
+
 # [1.10.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.9.0...v1.10.0) (2026-05-14)
 
 
