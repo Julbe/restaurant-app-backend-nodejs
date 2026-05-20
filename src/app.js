@@ -41,5 +41,5 @@ connectDB();
 
 // Levantar servidor
 app.listen(PORT, "0.0.0.0", async () => {
-  console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+  console.log(`Servidor http://0.0.0.0:${PORT}`);
 });
