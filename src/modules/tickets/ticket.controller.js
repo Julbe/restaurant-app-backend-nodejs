@@ -76,7 +76,18 @@ export default class TicketController extends BaseController {
     }
 
     async beforeCreate(req) {
-        return normalizeTicketPayload(req.body);
+        let payload = normalizeTicketPayload(req.body);
+        const weekNumber = String(getWeekNumber()).padStart(2, "0");
+        let code_ticket = payload.code_ticket;
+        let exists = true;
+
+        while (exists) {
+            code_ticket = `${generateCode('T', 4)}-${weekNumber}`;
+            exists = await Ticket.exists({ code_ticket });
+        }
+
+        payload.code_ticket = code_ticket;
+        return payload;
     }
 
     async beforeUpdate(req) {
@@ -89,22 +100,6 @@ export default class TicketController extends BaseController {
         delete data.code_ticket;
 
         return data;
-    }
-
-    async afterCreate(item) {
-        const weekNumber = String(getWeekNumber()).padStart(2, "0");
-        let code_ticket = item.code_ticket;
-        let exists = true;
-
-        while (exists) {
-            code_ticket = `${generateCode('T', 4)}-${weekNumber}`;
-            exists = await Ticket.exists({ code_ticket, _id: { $ne: item._id } });
-        }
-
-        item.code_ticket = code_ticket;
-        await item.save();
-
-        return item;
     }
 
     cancelTicket = async (req, res) => {

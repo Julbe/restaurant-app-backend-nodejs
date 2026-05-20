@@ -27,7 +27,7 @@ export const wrapResponse = (req, res, next) => {
 
     return oldJson({
       success: !isErrorStatus,
-      data: payload,
+      data: payload.data || payload,
     });
   };
   next();

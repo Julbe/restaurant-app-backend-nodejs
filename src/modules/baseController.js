@@ -39,7 +39,7 @@ export default class BaseController {
         const data = await this.beforeCreate(req);
         const item = await this.model.create(data);
         const newItem = await this.afterCreate(item, req);
-        res.status(201).json(newItem);
+        res.status(201).json({ data: newItem });
     }, `No se pudo agregar ${this.modelName}`);
 
     async findAll(query) {
