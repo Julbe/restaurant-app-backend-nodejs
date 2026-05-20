@@ -1,3 +1,10 @@
+## [1.11.2](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.11.1...v1.11.2) (2026-05-20)
+
+
+### Bug Fixes
+
+* basic change ([1c6c6fd](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/1c6c6fde57c795a2f166433670b7c2a7269435d4))
+
 ## [1.11.1](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.11.0...v1.11.1) (2026-05-20)
 
 
