@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.11.0...v1.11.1) (2026-05-20)
+
+
+### Bug Fixes
+
+* **response:** return payload correctly ([8966a83](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/8966a831630110de33d1da368d421c0931dc3461))
+
 # [1.11.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.10.0...v1.11.0) (2026-05-15)
 
 
