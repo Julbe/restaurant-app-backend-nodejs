@@ -31,7 +31,10 @@ export default class BaseController {
     async beforeDelete(req) { return req.body }
     async afterDelete(item, req) { return item }
 
-    async beforeGetAll(req) {
+    async beforeGetAll(query) {
+        if (query.parent_id === "null") {
+            query.parent_id = null;
+        }
         return [[], ''];
     }
 

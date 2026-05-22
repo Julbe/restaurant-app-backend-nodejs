@@ -1,6 +1,7 @@
 import { generateCode } from "../../utils/generateCodes.js";
 import BaseController from "../baseController.js";
 import { Order } from "../orders/order.model.js";
+import { buildBusinessBlocks } from "./ticket.business.filter.js";
 import { Ticket } from "./ticket.model.js";
 
 const SERVICE_TYPES = ["takeOut", "here"];
@@ -130,4 +131,8 @@ export default class TicketController extends BaseController {
             });
         }
     };
+
+    async beforeGetAll(req) {
+        return buildBusinessBlocks(req);
+    }
 }
