@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.11.2...v1.12.0) (2026-05-22)
+
+
+### Features
+
+* **Filters:** create new filters module ([4b7cdb8](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/4b7cdb887c879d3c7cd9faed0104e6098136163c))
+* **Ticket:** Add filter module. ([9063324](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/906332480a77b9d875ac8c037aba63826bacef69))
+
 ## [1.11.2](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.11.1...v1.11.2) (2026-05-20)
 
 
