@@ -8,7 +8,7 @@ const modifierRoute = express.Router();
 
 modifierRoute.post("/", verifyToken, Manager.Dish.create);
 modifierRoute.get("/", Manager.Dish.getAll);
-modifierRoute.get("/:id", verifyToken, Manager.Dish.getById);
+modifierRoute.get("/:id", Manager.Dish.getById);
 modifierRoute.put("/:id", verifyToken, Manager.Dish.update);
 modifierRoute.delete("/:id", verifyToken, requirePrivilege(PRIVILEGES.UPDATE_MENU), Manager.Dish.delete);
 

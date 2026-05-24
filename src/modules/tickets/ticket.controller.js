@@ -4,15 +4,7 @@ import { Order } from "../orders/order.model.js";
 import { buildBusinessBlocks } from "./ticket.business.filter.js";
 import { Ticket } from "./ticket.model.js";
 
-const SERVICE_TYPES = ["takeOut", "here"];
-
 const hasOwn = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
-
-const createHttpError = (message, statusCode) => {
-    const error = new Error(message);
-    error.statusCode = statusCode;
-    return error;
-};
 
 const normalizeTableId = (value) => {
     if (value === "" || value === undefined) {
@@ -24,18 +16,6 @@ const normalizeTableId = (value) => {
 
 const normalizeTicketPayload = (payload = {}, currentTicket = null) => {
     const data = { ...payload };
-    const serviceType = data.serviceType ?? currentTicket?.serviceType ?? "here";
-
-    if (!SERVICE_TYPES.includes(serviceType)) {
-        throw createHttpError("serviceType inválido. Usa 'takeOut' o 'here'.", 400);
-    }
-
-    data.serviceType = serviceType;
-
-    if (serviceType === "takeOut") {
-        data.tableId = null;
-        return data;
-    }
 
     if (hasOwn(data, "tableId")) {
         data.tableId = normalizeTableId(data.tableId);
@@ -62,7 +42,7 @@ export default class TicketController extends BaseController {
         super(
             Ticket,
             "Ticket",
-            ["code_ticket", "client_name", "notes", "serviceType"],
+            ["code_ticket", "client_name", "notes"],
             [
                 "waiterId",
                 "tableId"
@@ -92,9 +72,11 @@ export default class TicketController extends BaseController {
     }
 
     async beforeUpdate(req) {
-        const currentTicket = await Ticket.findById(req.params.id).select("serviceType tableId");
+        const currentTicket = await Ticket.findById(req.params.id).select("tableId");
         if (!currentTicket) {
-            throw createHttpError("No encontrado", 404);
+            const error = new Error("No encontrado");
+            error.statusCode = 404;
+            throw error;
         }
 
         const data = normalizeTicketPayload(req.body, currentTicket);

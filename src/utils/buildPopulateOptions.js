@@ -8,7 +8,13 @@ const buildPopulateEntry = (populateEntry, populateGroups = {}) => {
     if (!populateEntry) return null;
 
     if (typeof populateEntry === "string") {
-        const select = normalizeSelect(populateGroups[populateEntry]);
+        const populateConfig = populateGroups[populateEntry];
+
+        if (populateConfig && typeof populateConfig === "object" && populateConfig.path) {
+            return populateConfig;
+        }
+
+        const select = normalizeSelect(populateConfig);
         return select ? { path: populateEntry, select } : populateEntry;
     }
 

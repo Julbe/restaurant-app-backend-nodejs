@@ -3,26 +3,11 @@ const { Schema, model } = mongoose;
 
 const ticketSchema = new Schema({
     waiterId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
-    serviceType: {
-        type: String,
-        enum: ["takeOut", "here"],
-        default: "here",
-        index: true,
-    },
     tableId: {
         type: Schema.Types.ObjectId,
         ref: "Table",
         default: null,
         index: true,
-        validate: {
-            validator(value) {
-                if (this.serviceType === "takeOut") {
-                    return value == null;
-                }
-                return true;
-            },
-            message: "Los tickets takeOut no pueden tener mesa asignada.",
-        },
     },
     peopleCount: { type: Number, default: 1, min: 1 },
     code_ticket: { type: String, trim: true, sparse: true },
@@ -45,6 +30,6 @@ const ticketSchema = new Schema({
     client_name: { type: String, default: "", trim: true },
 }, { timestamps: true });
 
-ticketSchema.index({ waiterId: 1, serviceType: 1, tableId: 1, status: 1, createdAt: -1 });
+ticketSchema.index({ waiterId: 1, tableId: 1, status: 1, createdAt: -1 });
 
 export const Ticket = model("Ticket", ticketSchema);
