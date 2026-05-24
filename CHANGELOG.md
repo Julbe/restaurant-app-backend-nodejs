@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.12.0...v1.13.0) (2026-05-24)
+
+
+### Features
+
+* **Order:** Service type move to order instead ticket model. ([b7cc930](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/b7cc9300c6a9f7c07848853df797bec76f4a5f40))
+
 # [1.12.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.11.2...v1.12.0) (2026-05-22)
 
 
