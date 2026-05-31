@@ -28,6 +28,12 @@ const ticketSchema = new Schema({
     discount: { type: Number, default: 0, min: 0 },
     tips: { type: Number, default: 0, min: 0 },
     client_name: { type: String, default: "", trim: true },
+    invoiceId: {
+        type: Schema.Types.ObjectId,
+        ref: "Invoice",
+        default: null,
+        index: true,
+    },
 }, { timestamps: true });
 
 ticketSchema.index({ waiterId: 1, tableId: 1, status: 1, createdAt: -1 });

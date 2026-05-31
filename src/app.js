@@ -34,7 +34,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use(wrapResponse);
-setupRoutes(app);
+
+await setupRoutes(app);
 app.use(errorHandler);
 
 connectDB();

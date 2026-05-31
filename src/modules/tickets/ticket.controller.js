@@ -45,14 +45,16 @@ export default class TicketController extends BaseController {
             ["code_ticket", "client_name", "notes"],
             [
                 "waiterId",
-                "tableId"
+                "tableId",
+                "invoiceId"
             ],
             [
                 "waiterId",
-                "tableId"
+                "tableId",
+                "invoiceId"
             ],
             [],
-            { "waiterId": "user" }
+            { "waiterId": "user", "invoiceId": ["customer", "ticketId", "facturapi", "ticketCode"] }
         );
     }
 

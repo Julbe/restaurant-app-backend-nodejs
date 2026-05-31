@@ -5,7 +5,7 @@ import { verifyToken } from "../middlewares/verifyToken.js";
 import { requirePrivilege } from "../middlewares/requirePrivilege.js";
 import { getLatestReleaseInfo } from "../utils/changelogInfo.js";
 
-export const setupRoutes = (app) => {
+export const setupRoutes = async (app) => {
     const API_ROUTE = "/api";
     app.get(API_ROUTE, (req, res) => {
 
@@ -36,5 +36,5 @@ export const setupRoutes = (app) => {
     );
 
     // Registrar automáticamente todas las rutas de modules /*
-    registerRoutes(app, API_ROUTE);
+    await registerRoutes(app, API_ROUTE);
 };

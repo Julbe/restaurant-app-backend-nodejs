@@ -29,4 +29,5 @@ export const PRIVILEGES = {
     ticket_discount: "ticket-discount",
     ticket_cancel: "ticket-cancel",
     ticket_register: "ticket-register",
+    ticket_record: "ticket-record"
 };

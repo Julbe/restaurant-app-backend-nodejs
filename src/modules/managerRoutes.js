@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const registerRoutes = (app, apiPrefix = "/api", endFiles = ".routes.js") => {
+export const registerRoutes = async (app, apiPrefix = "/api", endFiles = ".routes.js") => {
   const modulesPath = __dirname; 
 
   // Leer todas las carpetas dentro de modules/
@@ -21,15 +21,14 @@ export const registerRoutes = (app, apiPrefix = "/api", endFiles = ".routes.js")
     if (!routeFile) continue;
 
     const routePath = path.join(modulesPath, dir, routeFile);
-    import(routePath).then((module) => {
-      const router = module.default;
-      if (!router) return;
+    const module = await import(routePath);
+    const router = module.default;
+    if (!router) continue;
 
-      // Montar ruta usando el nombre de la carpeta
-      const routePrefix = `${apiPrefix}/${dir}`;
-      app.use(routePrefix, router);
+    // Montar ruta usando el nombre de la carpeta
+    const routePrefix = `${apiPrefix}/${dir}`;
+    app.use(routePrefix, router);
 
-      console.log(`🚀 Ruta: [${routePrefix}] -> ${routeFile}`);
-    });
+    console.log(`🚀 Ruta: [${routePrefix}] -> ${routeFile}`);
   }
 };
