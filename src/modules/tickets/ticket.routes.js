@@ -6,6 +6,7 @@ const route = express.Router();
 
 route.post("/", verifyToken, Manager.Ticket.create);
 route.get("/", verifyToken, Manager.Ticket.getAll);
+route.get("/public/code/:code_ticket", Manager.Ticket.getPublicByCode);
 route.get("/:id", verifyToken, Manager.Ticket.getById);
 route.post("/:id/cancel", verifyToken, Manager.Ticket.cancelTicket);
 route.put("/:id", verifyToken, Manager.Ticket.update);

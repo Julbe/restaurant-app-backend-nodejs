@@ -31,7 +31,7 @@ const orderSelectedGroupSchema = new Schema({
 }, { _id: false });
 
 const orderItemSchema = new Schema({
-    dishId: { type: Schema.Types.ObjectId, ref: "Dish", required: true },
+    dishId: { type: Schema.Types.ObjectId, ref: "Dish", default: null },
     name: { type: String, required: true, trim: true },
     basePrice: { type: Number, default: 0, min: 0 },
     quantity: { type: Number, default: 1, min: 1 },

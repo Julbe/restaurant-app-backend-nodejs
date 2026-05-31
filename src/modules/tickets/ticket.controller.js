@@ -1,6 +1,7 @@
 import { generateCode } from "../../utils/generateCodes.js";
 import BaseController from "../baseController.js";
 import { Order } from "../orders/order.model.js";
+import { catchAsync } from "../../utils/catchAsync.js";
 import { buildBusinessBlocks } from "./ticket.business.filter.js";
 import { Ticket } from "./ticket.model.js";
 
@@ -36,6 +37,10 @@ const getWeekNumber = (date = new Date()) => {
     const yearStart = new Date(Date.UTC(utcDate.getUTCFullYear(), 0, 1));
     return Math.ceil((((utcDate - yearStart) / 86400000) + 1) / 7);
 };
+
+const normalizeTicketCode = (value = "") => String(value).trim();
+
+const escapeRegex = (value = "") => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export default class TicketController extends BaseController {
     constructor() {
@@ -115,6 +120,30 @@ export default class TicketController extends BaseController {
             });
         }
     };
+
+    getPublicByCode = catchAsync(async (req, res) => {
+        const codeTicket = normalizeTicketCode(req.params.code_ticket);
+
+        if (!codeTicket) {
+            return res.status(400).json({ error: "code_ticket es requerido" });
+        }
+
+        const ticket = await Ticket.findOne({
+            code_ticket: { $regex: `^${escapeRegex(codeTicket)}$`, $options: "i" },
+        })
+            .populate({
+                path: "invoiceId",
+                select: "ticketCode status customer facturapi invoice createdAt",
+            })
+            .lean()
+            .exec();
+
+        if (!ticket) {
+            return res.status(404).json({ error: "No encontrado" });
+        }
+
+        res.json(ticket);
+    }, "No se pudo consultar el ticket por código");
 
     async beforeGetAll(req) {
         return buildBusinessBlocks(req);

@@ -12,7 +12,7 @@ export const wrapResponse = (req, res, next) => {
     if (
       payload &&
       typeof payload === "object" &&
-      ("page" in payload || "limit" in payload || "total" in payload)
+      ("page" in payload || "limit" in payload)
     ) {
       const { data, ...meta } = payload;
 
