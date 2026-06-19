@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.15.0...v1.15.1) (2026-06-19)
+
+
+### Bug Fixes
+
+* **Invoice:** Update invoice description ([3baac1d](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/3baac1d2f40f14caf2125ecc8d4bc952d0ce69ab))
+
 # [1.15.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.14.0...v1.15.0) (2026-05-31)
 
 
