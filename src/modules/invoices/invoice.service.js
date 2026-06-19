@@ -5,7 +5,7 @@ import { Invoice } from "./invoice.model.js";
 const FACTURAPI_PRODUCT_KEY = "90101501";
 const FACTURAPI_UNIT_KEY = "E48";
 const FACTURAPI_UNIT_NAME = "Unidad de servicio";
-const FACTURAPI_DESCRIPTION = "Consumo en restaurante";
+const FACTURAPI_DESCRIPTION = "Consumo de alimentos.";
 const FACTURAPI_SERIES = "R";
 const FACTURAPI_TAX_RATE = Number(0.16);
 const Facturapi = FacturapiModule.default || FacturapiModule;
@@ -140,7 +140,7 @@ const buildFacturapiInvoicePayload = ({ ticket, customer, invoiceInput }) => ({
         {
             quantity: 1,
             product: {
-                description: `${FACTURAPI_DESCRIPTION} - Ticket ${ticket.code_ticket}`,
+                description: `${FACTURAPI_DESCRIPTION}`,
                 product_key: FACTURAPI_PRODUCT_KEY,
                 unit_key: FACTURAPI_UNIT_KEY,
                 unit_name: FACTURAPI_UNIT_NAME,
