@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.14.0...v1.15.0) (2026-05-31)
+
+
+### Features
+
+* **Invoice:** update ticket API. ([4bf3bf7](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/4bf3bf7661806403ed80af44aadfecdcc2c2e174))
+
 # [1.14.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.13.0...v1.14.0) (2026-05-31)
 
 
