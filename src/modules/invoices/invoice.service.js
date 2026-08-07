@@ -1,6 +1,8 @@
 import FacturapiModule from "facturapi";
 import { Ticket } from "../tickets/ticket.model.js";
+import { BillingCustomer } from "../billingCustomers/billingCustomer.model.js";
 import { Invoice } from "./invoice.model.js";
+import { generateUniqueCode } from "../../utils/generateCodes.js";
 
 const FACTURAPI_PRODUCT_KEY = "90101501";
 const FACTURAPI_UNIT_KEY = "E48";
@@ -157,6 +159,44 @@ const buildFacturapiInvoicePayload = ({ ticket, customer, invoiceInput }) => ({
     ],
 });
 
+const saveBillingCustomer = async (customer, invoiceInput) => {
+
+    const rfcClient = customer.taxId;
+
+    const billingCustomerPayload = {
+        razonSocial: customer.legalName,
+        codigoPostal: customer.taxZipCode,
+        email: customer.email.toLowerCase(),
+        regimenFiscal: customer.taxSystem,
+        invoiceUse: invoiceInput.use,
+    };
+
+    const existingCustomer = await BillingCustomer.findOne({ rfc: rfcClient });
+
+    if (existingCustomer) {
+        Object.assign(existingCustomer, billingCustomerPayload);
+        return existingCustomer.save();
+    }
+
+    const clientCode = await generateUniqueCode(BillingCustomer, "FC", 6, "clientCode");
+
+    try {
+        return await BillingCustomer.create({
+            ...billingCustomerPayload,
+            rfc: rfcClient,
+            clientCode,
+        });
+    } catch (error) {
+        if (error?.code !== 11000) throw error;
+
+        return BillingCustomer.findOneAndUpdate(
+            { rfc: rfcClient },
+            { $set: billingCustomerPayload },
+            { new: true, runValidators: true }
+        );
+    }
+};
+
 const extractFacturapiError = (error) => {
     const message =
         error?.response?.data?.message ||
@@ -272,6 +312,16 @@ export class InvoiceService {
             };
             record.errorMessage = "";
 
+            let billingCustomer = null;
+            let billingCustomerWarning = "";
+
+            try {
+                billingCustomer = await saveBillingCustomer(customer, invoiceInput);
+            } catch (error) {
+                billingCustomerWarning = "No se pudo guardar el cliente fiscal para reutilizarlo.";
+                console.error(billingCustomerWarning, error);
+            }
+
             if (invoiceInput.sendEmail) {
                 if (!customer.email) {
                     const emailError = buildError(
@@ -341,6 +391,11 @@ export class InvoiceService {
                     livemode: Boolean(facturapiInvoice.livemode),
                     emailSent: Boolean(record.emailDelivery?.sent),
                 },
+                billingCustomer: billingCustomer ? {
+                    id: billingCustomer._id,
+                    clientCode: billingCustomer.clientCode,
+                } : null,
+                billingCustomerWarning: billingCustomerWarning || undefined,
                 payload: invoicePayload,
                 providerResponse: facturapiInvoice,
             };

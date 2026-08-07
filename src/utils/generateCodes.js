@@ -7,13 +7,13 @@ const generateCode = (prefix = "", length = 5) => {
     return `${prefix != '' ? prefix + "-" : ""}${code}`;
 }
 
-const generateUniqueCode = async (ExerciseModel, prefix = "", length = 5) => {
+const generateUniqueCode = async (ExerciseModel, prefix = "", length = 5, field = "key") => {
     let code;
     let exists = true;
 
     while (exists) {
         code = generateCode(prefix, length);
-        exists = await ExerciseModel.findOne({ key: code });
+        exists = await ExerciseModel.exists({ [field]: code });
     }
 
     return code;
