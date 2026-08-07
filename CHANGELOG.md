@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.15.1...v1.16.0) (2026-08-07)
+
+
+### Features
+
+* **BillingCustomer:** create new endpoint ([f5de44c](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/f5de44c6980a387b2da8abc99e0d42ec51d3021f))
+
 ## [1.15.1](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.15.0...v1.15.1) (2026-06-19)
 
 
