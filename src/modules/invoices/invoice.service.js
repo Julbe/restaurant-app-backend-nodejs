@@ -114,6 +114,28 @@ const getTicketByCode = async (ticketCode) => {
     return ticket;
 };
 
+const normalizeTicketCodes = (ticketCodes) => {
+    if (!Array.isArray(ticketCodes) || ticketCodes.length < 1 || ticketCodes.length > 3) {
+        throw buildError(
+            "ticketCodes debe contener entre uno y tres tickets.",
+            400,
+            "Envía entre uno y tres códigos de ticket."
+        );
+    }
+
+    const normalizedCodes = ticketCodes.map((ticketCode) => normalizeText(ticketCode).toUpperCase());
+
+    if (normalizedCodes.some((ticketCode) => !ticketCode)) {
+        throw buildError("Cada ticketCode es obligatorio.", 400, "Envía códigos de ticket válidos.");
+    }
+
+    if (new Set(normalizedCodes).size !== normalizedCodes.length) {
+        throw buildError("No se pueden facturar tickets repetidos.", 400, "No repitas códigos de ticket.");
+    }
+
+    return normalizedCodes;
+};
+
 const mapPaymentForm = (ticketPaymentMethod) => TICKET_PAYMENT_FORM_MAP[ticketPaymentMethod] || "99";
 
 const mapPaymentMethod = (ticketPaymentMethod) => ticketPaymentMethod === "IN_DEBT" ? "PPD" : "PUE";
@@ -259,11 +281,11 @@ const downloadFacturapiInvoiceFile = async (facturapiClient, invoiceId, format) 
 };
 
 export class InvoiceService {
-    static async processFacturapiInvoice(payload = {}) {
+    static async processFacturapiInvoice(payload = {}, dependencies = {}) {
         const customer = sanitizeCustomerInput(payload.customer);
         const invoiceInput = normalizeInvoiceInput(payload.invoice);
         const ticket = await getTicketByCode(payload.ticketCode || payload.code_ticket);
-        const facturapiClient = getFacturapiClient();
+        const facturapiClient = dependencies.facturapiClient || getFacturapiClient();
 
         const customerPayload = buildFacturapiCustomerPayload(customer);
         const invoicePayload = buildFacturapiInvoicePayload({ ticket, customer, invoiceInput });
@@ -293,7 +315,10 @@ export class InvoiceService {
         });
 
         try {
-            const facturapiCustomer = await createFacturapiCustomer(facturapiClient, customerPayload);
+            const facturapiCustomer = dependencies.facturapiCustomer || await createFacturapiCustomer(
+                facturapiClient,
+                customerPayload
+            );
             record.responsePayload.customer = facturapiCustomer;
             const facturapiInvoice = await createFacturapiInvoice(facturapiClient, {
                 ...invoicePayload,
@@ -419,6 +444,61 @@ export class InvoiceService {
             await record.save();
             throw error;
         }
+    }
+
+    static async processFacturapiInvoices(payload = {}) {
+        const customer = sanitizeCustomerInput(payload.customer);
+        const invoiceInput = normalizeInvoiceInput(payload.invoice);
+        const ticketCodes = normalizeTicketCodes(payload.ticketCodes);
+
+        // Verifica el lote completo antes de crear el cliente o emitir facturas.
+        await Promise.all(ticketCodes.map((ticketCode) => getTicketByCode(ticketCode)));
+
+        const facturapiClient = getFacturapiClient();
+        const facturapiCustomer = await createFacturapiCustomer(
+            facturapiClient,
+            buildFacturapiCustomerPayload(customer)
+        );
+        const invoices = [];
+
+        // Se procesan en orden para que un fallo no impida informar el resultado de los demás tickets.
+        for (const ticketCode of ticketCodes) {
+            try {
+                const result = await this.processFacturapiInvoice(
+                    { ticketCode, customer, invoice: invoiceInput },
+                    { facturapiClient, facturapiCustomer }
+                );
+
+                invoices.push({
+                    ok: true,
+                    ticketCode,
+                    invoiceRecordId: result.invoiceRecordId,
+                    facturapiInvoiceId: result.facturapi.invoiceId,
+                    emailSent: result.facturapi.emailSent,
+                });
+            } catch (error) {
+                invoices.push({
+                    ok: false,
+                    ticketCode,
+                    statusCode: error.statusCode || 500,
+                    message: error.customMessage || error.message,
+                });
+            }
+        }
+
+        const issuedInvoices = invoices.filter((invoice) => invoice.ok);
+
+        return {
+            ok: issuedInvoices.length === invoices.length,
+            message: issuedInvoices.length === invoices.length
+                ? "Facturas generadas correctamente."
+                : "Algunos tickets no pudieron facturarse.",
+            facturapi: {
+                customerId: facturapiCustomer.id,
+                livemode: Boolean(facturapiCustomer.livemode),
+            },
+            invoices,
+        };
     }
 
     static async sendInvoiceByEmail({ invoiceRecordId, email }) {

@@ -52,6 +52,11 @@ const sendDownloadResponse = async (res, { file, fileName, contentType }) => {
 export default class InvoiceController {
     processFacturapi = async (req, res, next) => {
         try {
+            if (req.body?.ticketCodes !== undefined) {
+                const result = await InvoiceService.processFacturapiInvoices(req.body);
+                return res.status(result.ok ? 201 : 207).json(result);
+            }
+
             const result = await InvoiceService.processFacturapiInvoice(req.body);
             return res.status(201).json(result);
         } catch (error) {
