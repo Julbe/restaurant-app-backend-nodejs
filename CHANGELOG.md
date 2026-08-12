@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.16.0...v1.17.0) (2026-08-12)
+
+
+### Features
+
+* **invoiceAPI:** Handle multiple tickets ([d7b464f](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/d7b464f8b442dc20dabaa97cd56161e160be324c))
+
 # [1.16.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.15.1...v1.16.0) (2026-08-07)
 
 
