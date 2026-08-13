@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.17.0...v1.18.0) (2026-08-13)
+
+
+### Features
+
+* **Invoice:** Multiple emails ([bb6ef4d](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/bb6ef4d588b3701e46527f1222e5a9a3cf8fd8b4))
+
 # [1.17.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.16.0...v1.17.0) (2026-08-12)
 
 
