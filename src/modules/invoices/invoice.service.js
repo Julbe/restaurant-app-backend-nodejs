@@ -24,6 +24,13 @@ const TICKET_PAYMENT_FORM_MAP = {
 
 const normalizeText = (value = "") => String(value).trim();
 
+const normalizeEmailRecipients = (value = "") => [...new Set(
+    (Array.isArray(value) ? value : [value])
+        .flatMap((email) => String(email || "").split(","))
+        .map((email) => email.trim().toLowerCase())
+        .filter(Boolean)
+)];
+
 const buildError = (message, statusCode = 400, customMessage = message) => {
     console.log(message)
     const error = new Error(message);
@@ -144,7 +151,8 @@ const buildFacturapiCustomerPayload = (customer) => ({
     legal_name: customer.legalName,
     tax_id: customer.taxId,
     tax_system: customer.taxSystem,
-    email: customer.email || undefined,
+    // Facturapi registra un solo correo en el cliente; los demás se usan al enviar el CFDI.
+    email: normalizeEmailRecipients(customer.email)[0] || undefined,
     address: {
         zip: customer.taxZipCode,
     },
@@ -348,7 +356,9 @@ export class InvoiceService {
             }
 
             if (invoiceInput.sendEmail) {
-                if (!customer.email) {
+                const recipients = normalizeEmailRecipients(customer.email);
+
+                if (recipients.length === 0) {
                     const emailError = buildError(
                         "No se proporcionó un correo para enviar la factura.",
                         400,
@@ -365,17 +375,17 @@ export class InvoiceService {
                 }
 
                 try {
-                    await sendFacturapiInvoiceByEmail(facturapiClient, facturapiInvoice.id, customer.email);
+                    await sendFacturapiInvoiceByEmail(facturapiClient, facturapiInvoice.id, recipients);
                     record.emailDelivery = {
                         sent: true,
-                        recipients: [customer.email],
+                        recipients,
                         sentAt: new Date(),
                         lastError: "",
                     };
                 } catch (emailError) {
                     record.emailDelivery = {
                         sent: false,
-                        recipients: [customer.email],
+                        recipients,
                         sentAt: null,
                         lastError: emailError.message,
                     };
@@ -516,8 +526,8 @@ export class InvoiceService {
             );
         }
 
-        const recipientEmail = normalizeText(email || record.customer?.email);
-        if (!recipientEmail) {
+        const recipients = normalizeEmailRecipients(email || record.customer?.email);
+        if (recipients.length === 0) {
             throw buildError(
                 "No se encontró un correo destino.",
                 400,
@@ -526,11 +536,11 @@ export class InvoiceService {
         }
 
         const facturapiClient = getFacturapiClient();
-        await sendFacturapiInvoiceByEmail(facturapiClient, record.facturapi.invoiceId, recipientEmail);
+        await sendFacturapiInvoiceByEmail(facturapiClient, record.facturapi.invoiceId, recipients);
 
         record.emailDelivery = {
             sent: true,
-            recipients: [recipientEmail],
+            recipients,
             sentAt: new Date(),
             lastError: "",
         };
@@ -540,7 +550,7 @@ export class InvoiceService {
             ok: true,
             invoiceRecordId: record._id,
             facturapiInvoiceId: record.facturapi.invoiceId,
-            recipients: [recipientEmail],
+            recipients,
             message: "Factura enviada por correo correctamente.",
         };
     }
