@@ -18,6 +18,7 @@ const TICKET_PAYMENT_FORM_MAP = {
     CASH: "01",
     DEBIT: "28",
     CREDIT: "04",
+    TRANSFER: "03",
     OTHER: "99",
     IN_DEBT: "99",
 };

@@ -21,7 +21,7 @@ const ticketSchema = new Schema({
     total: { type: Number, default: 0, min: 0 },
     paymentMethod: {
         type: String,
-        enum: ["CASH", "DEBIT", "CREDIT", "OTHER", "IN_DEBT"],
+        enum: ["CASH", "DEBIT", "CREDIT", "TRANSFER", "OTHER", "IN_DEBT"],
         default: null,
     },
     paymentDetails: { type: String, default: "" },
