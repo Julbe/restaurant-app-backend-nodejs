@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.18.0...v1.19.0) (2026-11-03)
+
+
+### Features
+
+* **payment:** add transger payment method ([f6c43ba](https://github.com/Julbe/restaurant-app-backend-nodejs/commit/f6c43ba17037703f83b4b036fd3a5bf5616e0bde))
+
 # [1.18.0](https://github.com/Julbe/restaurant-app-backend-nodejs/compare/v1.17.0...v1.18.0) (2026-08-13)
 
 
